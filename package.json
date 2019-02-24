@@ -1,0 +1,21 @@
+{
+  "name": "sound-down",
+  "version": "1.0.0",
+  "description": "soundcloud batch download",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Will-Copeland/sound-down.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Will-Copeland/sound-down/issues"
+  },
+  "homepage": "https://github.com/Will-Copeland/sound-down#readme",
+  "devDependencies": {
+  }
+}
