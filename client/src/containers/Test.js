@@ -10,7 +10,7 @@ export default class Test extends Component {
   }
 
   componentDidMount() {
-    fetch('/test')
+    fetch('http://localhost:3000/test')
       .then(response => response.json())
       .then(data => this.setState({ data }));
   }
