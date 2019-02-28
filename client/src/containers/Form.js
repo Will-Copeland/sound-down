@@ -39,7 +39,7 @@ class Form extends Component {
     super(props);
 
     this.state = {
-      link: null,
+      link: '',
     };
   }
 
@@ -70,6 +70,7 @@ class Form extends Component {
             className: classes.floatingLabelFocusStyle,
           }}
           className={classes.textField}
+          onChange={e => this.handleChange(e)}
           label="Link"
           value={link}
         />
