@@ -1,7 +1,4 @@
-const request = require("request");
-const axios = require("axios");
 const fetch = require('node-fetch');
-const fs = require('fs');
 
 this.scdl = null;
 
@@ -39,8 +36,16 @@ class Scdl {
 
     const item = await fetch(track_url)
       .then(res => res.json())
-
+        // console.log(item);
+        
     return item;
+  }
+
+  streamTrackArchive(track, cb) {
+    return fetch(this._appendParams(track.stream_url, true))
+    .then(res => {
+        cb(res.body);
+    })
   }
 
   streamTrack(track, writeStream) {

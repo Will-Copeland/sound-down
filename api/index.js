@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require('path');
+const archiever = require('archiver');
 
 require('dotenv').config(path.resolve(__dirname, '.env'));
 
@@ -30,6 +31,17 @@ app.post("/sound", async (req, res, next) => {
       `attachment; filename='${item.permalink}.mp3'`
     );
     scdl.streamTrack(item, res);
+  } else if (item.kind === "playlist") {
+    let archive = archiever('zip', {
+      zlib: { level: 9 }
+    })
+    archive.append()
+    for(i=0; i > item.tracks.length; i++) {
+      scdl.streamTrackArchive(track[i].stream_url, cb(readStream => {
+        archive.append(readStream)
+      }))
+
+    }
   }
 });
 
