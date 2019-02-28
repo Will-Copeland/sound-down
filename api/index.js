@@ -1,9 +1,13 @@
 const express = require("express");
 const app = express();
-const scdl = require("./scdl");
 const stream = require("stream");
 const fs = require("fs");
 const request = require("request");
+const path = require('path');
+
+require('dotenv').config(path.resolve(__dirname, '.env'));
+
+const scdl = require("./scdl").init(process.env.CLIENT_ID);
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,21 +23,16 @@ app.get("/test", (req, res, next) => {
 });
 
 app.post("/sound", async (req, res, next) => {
-  console.log("Sound submitted!", req.body);
-  const item = await scdl.getItem(
-    req.body.URL,
-    "a3e059563d7fd3372b49b37f00a00bcf"
-  );
+  const item = await scdl.getItem(req.body.URL);
+
   if (item.kind === "track") {
-    console.log(item.title);
-    res.setHeader("Content-type", "audio/mpeg");
+    console.log(item);
+    res.setHeader("Content-type", "audio/mp3");
     res.setHeader(
       "Content-disposition",
-      "attachment; filename=" + "'test.mp3'"
+      `attachment; filename='${item.permalink}.mp3'`
     );
-    await scdl.streamTrack(item, "a3e059563d7fd3372b49b37f00a00bcf", track => {
-      res.send(track.data);
-    });
+    scdl.streamTrack(item, res);
   }
 });
 

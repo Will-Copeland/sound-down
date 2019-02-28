@@ -27,7 +27,15 @@ class App extends React.Component {
         URL,
       },
     }).then((response) => {
-      saveAs(response.data, 'text.mp3');
+      console.log(response.headers);
+      const name = response
+        .headers['content-disposition']
+        .slice(
+          response.headers['content-disposition'].indexOf('=') + 2,
+          -1,
+        );
+
+      saveAs(response.data, name);
     });
   };
 
