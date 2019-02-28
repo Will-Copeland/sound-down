@@ -1,8 +1,5 @@
 const express = require("express");
 const app = express();
-const stream = require("stream");
-const fs = require("fs");
-const request = require("request");
 const path = require('path');
 
 require('dotenv').config(path.resolve(__dirname, '.env'));
