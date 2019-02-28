@@ -30,18 +30,29 @@ app.post("/sound", async (req, res, next) => {
       "Content-disposition",
       `attachment; filename='${item.permalink}.mp3'`
     );
-    scdl.streamTrack(item, res);
-  } else if (item.kind === "playlist") {
-    let archive = archiever('zip', {
-      zlib: { level: 9 }
-    })
-    archive.append()
-    for(i=0; i > item.tracks.length; i++) {
-      scdl.streamTrackArchive(track[i].stream_url, cb(readStream => {
-        archive.append(readStream)
-      }))
 
-    }
+    await scdl.streamTrack(item).pipe(res);
+  } else if (item.kind === "playlist") {
+    console.log('tracks' in item)
+    res.setHeader("Content-type", "application/zip");
+    res.setHeader(
+      "Content-disposition",
+      `attachment; filename='${item.permalink}.zip'`
+    );
+
+    await scdl.streamPlaylistToZip(item, res)
+    console.log('ended');
+    res.end();
+    // let archive = archiever('zip', {
+    //   zlib: { level: 9 }
+    // })
+    // archive.append()
+    // for(i=0; i > item.tracks.length; i++) {
+    //   scdl.streamTrackArchive(track[i].stream_url, cb(readStream => {
+    //     archive.append(readStream)
+    //   }))
+
+    // }
   }
 });
 
