@@ -14,37 +14,49 @@ class App extends React.Component {
     this.state = {
       loading: false,
       error: false,
+      downloading: false,
+      src: null,
+      downloads: [],
     };
   }
 
   submitForm = (URL) => {
-    this.setState({ loading: true });
-    axios({
-      method: 'post',
-      url: '/sound',
-      responseType: 'blob', // important
-      data: {
-        URL,
-      },
-    }).then((response) => {
-      console.log(response.headers);
-      const name = response
-        .headers['content-disposition']
-        .slice(
-          response.headers['content-disposition'].indexOf('=') + 2,
-          -1,
-        );
+    const { downloads } = this.state;
 
-      saveAs(response.data, name);
+    this.setState({
+      downloads: [
+        ...downloads,
+        `http://localhost:8080/sound?url=${URL}`,
+      ],
     });
   };
 
+  renderIframes = () => {
+    const { downloads } = this.state;
+    if (!downloads.length) return null;
+    return downloads
+      .map((src, i) => {
+        const key = `dl-${i}`;
+        return (
+          <iframe
+            key={key}
+            id={key}
+            style={{ display: 'none' }}
+            title={key}
+            src={src}
+          />
+        );
+      });
+  }
+
   render() {
+    const { downloading, src } = this.state;
     return (
       <div className="App">
         <Layout>
           <Form sendForm={this.submitForm} />
         </Layout>
+        { this.renderIframes() }
       </div>
 
     );

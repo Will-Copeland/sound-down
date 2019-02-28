@@ -1,7 +1,5 @@
 const fetch = require('node-fetch');
-const fs = require('fs');
-const archiver = require('archiver');
-const { get } = require('http');
+const archiever = require('archiver');
 
 this.scdl = null;
 
@@ -30,55 +28,43 @@ class Scdl {
     return `${url}${queryString ? '?' + queryString: ''}`;
   }
 
-  async getItem(trackUrl) {
-    trackUrl = this._appendParams(
+  async getItem(track_url) {
+    track_url = this._appendParams(
       `https://api.soundcloud.com/resolve`,
       true, 
-      { url:  }
+      { url: track_url }
     )
 
-    const item = await fetch(trackUrl)
+    const item = await fetch(track_url)
       .then(res => res.json())
-
+        
     return item;
   }
 
-  streamTrack(track, writeStream) {
-    // return fetch(this._appendParams(track.stream_url, true))
-    //   .then(res => {
-    //     res.body.pipe(writeStream);
-    //   })
-    get(this._appendParams(track.stream_url, true), (res) => {
-      res.pipe(writeStream);
-    })
+  streamPlaylistArchive(tracks, archive) {
+    const len = tracks.length;
+    const proms = [];
+    tracks.map(track => {
+      console.log('adding:', track.stream_url)
+      proms.push(
+        fetch(this._appendParams(track.stream_url, true))
+          .then(res => {
+            archive.append(
+              res.body, 
+              { name: `${track.permalink}.mp3` }
+            );
+        })        
+      )
+    });
+
+    return Promise.all(proms);
   }
 
-  async streamPlaylistToZip(item, writeStream) {
-    return new Promise(resolve => {
-      const tracks = item.tracks;
-      const len = tracks.length;
-      
-      const archive = archiver('zip', { zlib: { level: 9 } });
-      archive.pipe(writeStream);
-
-      for (let i; i < tracks.length; i += 1) {
-          let track = tracks[i];
-          fetch(this._appendParams(track.stream_url, true))
-            .then(res => (
-              archive.append(res.body, { name: `${track.permalink}.mp3` }))
-            );
-        }
-  
-      console.log('hello')
-  
-      writeStream.on('end', () => resolve())
-  
-  
-      archive.finalize();
-  
-  
-    })
-
+  streamTrack(track, writeStream) {
+      return fetch(this._appendParams(track.stream_url, true))
+        .then(res => {
+          res.body.pipe(writeStream);
+        })
   }
 }
 
