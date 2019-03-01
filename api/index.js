@@ -24,15 +24,21 @@ app.get("/sound", async (req, res, next) => {
   if (item.kind === "track") {
     console.log(item);
     res.setHeader("Content-type", "audio/mp3");
+    res.setHeader("Content-size", item.original_content_size)
     res.setHeader(
       "Content-disposition",
       `attachment; filename=${item.permalink}.mp3`
     );
 
-    await scdl.streamTrack(item).pipe(res);
+     scdl.streamTrack(item.stream_url, res);
   } else if (item.kind === "playlist") {
-    console.log('playlist mode')
+
+    const size = item.tracks.reduce((bytes, item) => {
+      return bytes =+ item.original_content_size;
+    });
+
     res.setHeader("Content-type", "application/zip");
+    res.setHeader("Content-size", size);
     res.setHeader(
       "Content-disposition",
       `attachment; filename=${item.permalink}.zip`
@@ -50,7 +56,6 @@ app.get("/sound", async (req, res, next) => {
     archive.pipe(res);
 
     await scdl.streamPlaylistArchive(item.tracks, archive);
-
     archive.finalize();
   }
 });

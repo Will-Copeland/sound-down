@@ -60,8 +60,8 @@ class Scdl {
     return Promise.all(proms);
   }
 
-  streamTrack(track, writeStream) {
-      return fetch(this._appendParams(track.stream_url, true))
+  streamTrack(trackUrl, writeStream) {
+      return fetch(this._appendParams(trackUrl, true))
         .then(res => {
           res.body.pipe(writeStream);
         })

@@ -1,18 +1,21 @@
 import React from 'react';
-import axios from 'axios';
-import { log } from 'util';
-import { saveAs } from 'file-saver';
-import logo from './logo.svg';
+import { LinearProgress, withStyles } from '@material-ui/core';
 // import './App.css';
 
 import Form from './containers/Form';
 import Layout from './containers/Layout';
 
+const styles = {
+  progress: {
+    height: '2rem',
+    width: '100%',
+  },
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
       error: false,
       downloading: false,
       src: null,
@@ -22,8 +25,8 @@ class App extends React.Component {
 
   submitForm = (URL) => {
     const { downloads } = this.state;
-
     this.setState({
+      downloading: true,
       downloads: [
         ...downloads,
         `http://localhost:8080/sound?url=${URL}`,
@@ -51,10 +54,12 @@ class App extends React.Component {
 
   render() {
     const { downloading, src } = this.state;
+    const { classes } = this.state;
     return (
       <div className="App">
         <Layout>
-          <Form sendForm={this.submitForm} />
+          {downloading ? <LinearProgress /> : <Form sendForm={this.submitForm} />}
+          
         </Layout>
         { this.renderIframes() }
       </div>
@@ -64,4 +69,4 @@ class App extends React.Component {
 }
 
 
-export default App;
+export default withStyles(styles)(App);
