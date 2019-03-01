@@ -1,7 +1,5 @@
-const request = require("request");
-const axios = require("axios");
 const fetch = require('node-fetch');
-const fs = require('fs');
+const archiever = require('archiver');
 
 this.scdl = null;
 
@@ -39,8 +37,27 @@ class Scdl {
 
     const item = await fetch(track_url)
       .then(res => res.json())
-
+        
     return item;
+  }
+
+  streamPlaylistArchive(tracks, archive) {
+    const len = tracks.length;
+    const proms = [];
+    tracks.map(track => {
+      console.log('adding:', track.stream_url)
+      proms.push(
+        fetch(this._appendParams(track.stream_url, true))
+          .then(res => {
+            archive.append(
+              res.body, 
+              { name: `${track.permalink}.mp3` }
+            );
+        })        
+      )
+    });
+
+    return Promise.all(proms);
   }
 
   streamTrack(track, writeStream) {
