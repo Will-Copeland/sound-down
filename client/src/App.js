@@ -1,9 +1,10 @@
 import React from 'react';
-import { LinearProgress, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 // import './App.css';
 
 import Form from './containers/Form';
 import Layout from './containers/Layout';
+import Error from './components/Error';
 
 const styles = {
   progress: {
@@ -16,8 +17,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: false,
-      downloading: false,
+      error: 'test',
+      errOpen: false,
+      downloading: true,
       src: null,
       downloads: [],
     };
@@ -25,13 +27,19 @@ class App extends React.Component {
 
   submitForm = (URL) => {
     const { downloads } = this.state;
-    this.setState({
-      downloading: true,
-      downloads: [
-        ...downloads,
-        `http://localhost:8080/sound?url=${URL}`,
-      ],
-    });
+    console.log(URL);
+
+    if (URL.includes('https://soundcloud.com/')) {
+      this.setState({
+        downloading: true,
+        downloads: [
+          ...downloads,
+          `http://localhost:8080/sound?url=${URL}`,
+        ],
+      });
+    } else {
+      this.setState({ error: 'Invalid URL!', errOpen: true });
+    }
   };
 
   renderIframes = () => {
@@ -52,14 +60,23 @@ class App extends React.Component {
       });
   }
 
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ errOpen: false });
+  };
+
   render() {
-    const { downloading, src } = this.state;
+    const { downloading, error, errOpen } = this.state;
     const { classes } = this.state;
     return (
       <div className="App">
         <Layout>
-          {downloading ? <LinearProgress /> : <Form sendForm={this.submitForm} />}
-          
+          {error.length > 0 ? <Error handleClose={this.handleClose} open={errOpen} error={error} /> : <div /> }
+
+          <Form downloading={downloading} sendForm={this.submitForm} />
         </Layout>
         { this.renderIframes() }
       </div>

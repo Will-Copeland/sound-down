@@ -19,7 +19,7 @@ app.get("/test", (req, res, next) => {
 });
 
 app.get("/sound", async (req, res, next) => {
-  const item = await scdl.getItem(req.query.url);
+  const item = await scdl.getItem(req.query.url, res);
 
   if (item.kind === "track") {
     console.log(item);

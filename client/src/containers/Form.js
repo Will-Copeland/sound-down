@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   withStyles, TextField, Typography, Button,
 } from '@material-ui/core';
+import Loading from '../components/Loading';
 
 const styles = theme => ({
   form: {
@@ -54,13 +55,15 @@ class Form extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, downloading } = this.props;
     const { link } = this.state;
     return (
       <div className={classes.form}>
-        <Typography variant="h5">
+        {downloading ? <Loading /> : (
+          <Typography variant="h5">
             Paste playlist or song link:
-        </Typography>
+          </Typography>
+        )}
         <TextField
           style={{ color: 'white' }}
           InputProps={{
