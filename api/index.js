@@ -57,14 +57,13 @@ app.get("/sound", async (req, res, next) => {
 
 app.get("/get-track", async (req, res, next) => {
   const item = req.query.url;
+  
   res.setHeader("Content-type", "audio/mp3");
-    res.setHeader("Content-size", item.original_content_size)
     res.setHeader(
       "Content-disposition",
       `attachment; filename=${item.permalink}.mp3`
-    );
-
-     scdl.streamTrack(item.stream_url, res);
+    );      
+     scdl.streamTrack(item, res);
 });
 
 app.get("/stream-test", (req, res, next) => {});

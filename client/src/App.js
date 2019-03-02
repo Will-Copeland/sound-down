@@ -65,6 +65,18 @@ class App extends React.Component {
   // };
 
 
+  downloadTrack = (meta) => {
+    axios({
+      method: 'get',
+      url: `get-track/?url=${meta.stream_url}`,
+      responseType: 'blob', // important
+
+    }).then((res) => {
+      saveAs(res.data, `${meta.title}.mp3`);
+    });
+  }
+
+
   submitForm = (URL) => {
     this.setState({ loading: true });
 
@@ -77,12 +89,7 @@ class App extends React.Component {
         const meta = response.data;
 
         if (meta.kind === 'track') {
-          axios({
-            method: 'get',
-            url: `get-item/?url=${meta.stream_url}`,
-          }).then((response) => {
-            
-          })
+          this.downloadTrack(meta);
         }
         console.log(meta);
       });
