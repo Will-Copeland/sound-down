@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/core';
 import Header from './Header';
+import Disclaimer from '../components/Disclaimer';
+import Pitch from '../components/Pitch';
 
 const styles = theme => ({
   root: {
@@ -15,11 +17,17 @@ class Layout extends PureComponent {
     const { classes, children } = this.props;
     return (
       <div className={classes.root}>
+        <head>
+          <link href="https://fonts.googleapis.com/css?family=Play" rel="stylesheet" />
+        </head>
         <Header />
-
+        <Pitch />
         <main>
           {children}
         </main>
+        <footer>
+          <Disclaimer />
+        </footer>
       </div>
     );
   }

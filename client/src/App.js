@@ -17,9 +17,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: 'test',
+      error: '',
       errOpen: false,
-      downloading: true,
+      downloading: false,
       src: null,
       downloads: [],
     };

@@ -1,9 +1,9 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
 
 const Theme = createMuiTheme({
   typography: {
     color: '#FFF',
+    fontFamily: "'Play', sans-serif",
     h5: {
       color: '#FFF',
     },

@@ -21,4 +21,4 @@ const Error = ({ error, open, handleClose }) => (
   </div>
 );
 
-export default withStyles(styles)(Error);
+export default Error;

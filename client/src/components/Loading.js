@@ -6,6 +6,7 @@ import {
 const styles = {
   root: {
     position: 'static',
+    margin: '1rem',
   },
 
 };
