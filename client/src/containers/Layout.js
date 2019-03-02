@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/core';
 import Header from './Header';
-import Disclaimer from '../components/Disclaimer';
 import Pitch from '../components/Pitch';
 
 const styles = theme => ({
@@ -25,9 +24,6 @@ class Layout extends PureComponent {
         <main>
           {children}
         </main>
-        <footer>
-          <Disclaimer />
-        </footer>
       </div>
     );
   }
