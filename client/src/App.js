@@ -84,7 +84,7 @@ class App extends React.Component {
     if (URL.includes('https://soundcloud.com/')) {
       axios({
         method: 'get',
-        url: `item-meta/?url=${URL}`,
+        url: `/item-meta/?url=${URL}`,
       }).then((response) => {
         const meta = response.data;
 
