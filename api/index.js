@@ -13,6 +13,14 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.get("/", (req, res, next) => {
+  res.send("GOT")
+});
+
+app.get("/test", (req, res, next) => {
+  res.send('Test')
+});
+
 app.get("/item-meta", async (req, res, next) => {
   const item = await scdl.getItem(req.query.url);
 
