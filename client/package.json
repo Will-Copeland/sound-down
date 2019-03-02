@@ -19,8 +19,10 @@
     "eject": "react-scripts eject"
   },
   "proxy": {
-    "target": "http://localhost:8080",
-    "secure": false
+    "/": {
+      "target": "http://localhost:8080",
+      "secure": false
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
