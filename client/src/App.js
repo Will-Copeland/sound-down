@@ -34,7 +34,7 @@ class App extends React.Component {
         downloading: true,
         downloads: [
           ...downloads,
-          `http://localhost:8080/sound?url=${URL}`,
+          `/sound?url=${URL}`,
         ],
       });
     } else {
