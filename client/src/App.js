@@ -80,7 +80,9 @@ class App extends React.Component {
           axios({
             method: 'get',
             url: `get-item/?url=${meta.stream_url}`,
-          });
+          }).then((response) => {
+            
+          })
         }
         console.log(meta);
       });
