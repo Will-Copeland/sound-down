@@ -14,19 +14,13 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/test/?", (req, res, next) => {
-  res.send('Test')
-});
-
 app.get("/item-meta", async (req, res) => {
   const item = await scdl.getItem(req.query.url);
 
   res.send(item);
 });
 
-app.get("/get-playlist", async (req, res) => {
-  console.log('Playlist', req.query.url);
-  
+app.get("/get-playlist", async (req, res) => {  
   const item = await scdl.getItem(req.query.url);
 
   const size = item.tracks.reduce((bytes, item) => {
