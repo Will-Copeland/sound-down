@@ -39,7 +39,7 @@ class App extends React.Component {
       document.body.appendChild(a);
       const name = meta.title;
       a.style = 'display: none';
-      a.download = `${name}.mp3`;
+      a.download = name;
       a.rel = 'noopener';
       a.href = window.URL.createObjectURL(res.data);
       a.click();
