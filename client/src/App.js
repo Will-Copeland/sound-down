@@ -26,22 +26,26 @@ class App extends React.Component {
     };
   }
 
-  // submitForm = (URL) => {
-  //   const { downloads } = this.state;
-  //   console.log(URL);
+  downloadPlaylist = (meta) => {
+    const { src } = this.state;
+    console.log(src);
+    
+    axios({
+      method: 'get',
+      url: `get-playlist/?url=${src}`,
+      responseType: 'blob', // important
 
-  //   if (URL.includes('https://soundcloud.com/')) {
-  //     this.setState({
-  //       downloading: true,
-  //       downloads: [
-  //         ...downloads,
-  //         `http://localhost:8080/sound?url=${URL}`,
-  //       ],
-  //     });
-  //   } else {
-  //     this.setState({ error: 'Invalid URL!', errOpen: true });
-  //   }
-  // };
+    }).then((res) => {
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      const name = meta.title;
+      a.style = 'display: none';
+      a.download = `${name}.mp3`;
+      a.rel = 'noopener';
+      a.href = window.URL.createObjectURL(res.data);
+      a.click();
+    });
+  };
 
   // submitForm = (URL) => {
   //   this.setState({ loading: true });
@@ -72,7 +76,7 @@ class App extends React.Component {
       responseType: 'blob', // important
 
     }).then((res) => {
-      let a = document.createElement('a');
+      const a = document.createElement('a');
       document.body.appendChild(a);
       const name = meta.title;
       a.style = 'display: none';
@@ -85,7 +89,7 @@ class App extends React.Component {
 
 
   submitForm = (URL) => {
-    this.setState({ loading: true });
+    this.setState({ loading: true, src: URL });
 
 
     if (URL.includes('https://soundcloud.com/')) {
@@ -97,6 +101,8 @@ class App extends React.Component {
 
         if (meta.kind === 'track') {
           this.downloadTrack(meta);
+        } else if (meta.kind === 'playlist') {
+          this.downloadPlaylist(meta);
         }
         console.log(meta);
       });

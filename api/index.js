@@ -18,49 +18,44 @@ app.get("/test/?", (req, res, next) => {
   res.send('Test')
 });
 
-app.get("/item-meta", async (req, res, next) => {
+app.get("/item-meta", async (req, res) => {
   const item = await scdl.getItem(req.query.url);
 
   res.send(item);
 });
 
-app.get("/sound", async (req, res, next) => {
+app.get("/get-playlist", async (req, res) => {
+  console.log('Playlist', req.query.url);
+  
   const item = await scdl.getItem(req.query.url);
 
-  if (item.kind === "track") {
-    console.log(item);
-    
-  } else if (item.kind === "playlist") {
+  const size = item.tracks.reduce((bytes, item) => {
+    return bytes =+ item.original_content_size;
+  });
 
-    const size = item.tracks.reduce((bytes, item) => {
-      return bytes =+ item.original_content_size;
-    });
+  res.setHeader("Content-type", "application/zip");
+  res.setHeader("Content-size", size);
+  res.setHeader(
+    "Content-disposition",
+    `attachment; filename=${item.permalink}.zip`
+  );
 
-    res.setHeader("Content-type", "application/zip");
-    res.setHeader("Content-size", size);
-    res.setHeader(
-      "Content-disposition",
-      `attachment; filename=${item.permalink}.zip`
-    );
+  let archive = archiever('zip', {
+    zlib: { level: 9 }
+  })
 
-    let archive = archiever('zip', {
-      zlib: { level: 9 }
-    })
+  res.on('end', () => console.log('ended'));
+  res.on('close', () => console.log('closed'));
+  res.on('error', (err) => { throw err });
+  res.on('warning', (war) => console.log(war));
 
-    res.on('end', () => console.log('ended'));
-    res.on('close', () => console.log('closed'));
-    res.on('error', (err) => { throw err });
-    res.on('warning', (war) => console.log(war));
+  archive.pipe(res);
 
-    archive.pipe(res);
-
-    await scdl.streamPlaylistArchive(item.tracks, archive);
-    archive.finalize();
-  }
+  await scdl.streamPlaylistArchive(item.tracks, archive);
+  archive.finalize();
 });
 
-
-app.get("/get-track", async (req, res, next) => {
+app.get("/get-track", async (req, res) => {
   const item = req.query.url;
   
   res.setHeader("Content-type", "audio/mp3");
