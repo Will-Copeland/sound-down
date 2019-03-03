@@ -72,7 +72,14 @@ class App extends React.Component {
       responseType: 'blob', // important
 
     }).then((res) => {
-      saveAs(res.data, `${meta.title}.mp3`);
+      let a = document.createElement('a');
+      document.body.appendChild(a);
+      const name = meta.title;
+      a.style = 'display: none';
+      a.download = `${name}.mp3`;
+      a.rel = 'noopener';
+      a.href = window.URL.createObjectURL(res.data);
+      a.click();
     });
   }
 
