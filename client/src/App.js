@@ -83,6 +83,7 @@ class App extends React.Component {
           this.downloadPlaylist(meta);
         }
         console.log(meta);
+
       });
     }
   };
