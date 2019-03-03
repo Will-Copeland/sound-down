@@ -2,7 +2,6 @@ import React from 'react';
 import { withStyles } from '@material-ui/core';
 // import './App.css';
 import axios from 'axios';
-import { saveAs } from 'file-saver';
 import Form from './containers/Form';
 import Layout from './containers/Layout';
 import Error from './components/Error';
@@ -46,27 +45,6 @@ class App extends React.Component {
       a.click();
     });
   };
-
-  // submitForm = (URL) => {
-  //   this.setState({ loading: true });
-  //   axios({
-  //     method: 'post',
-  //     url: '/sound',
-  //     responseType: 'blob', // important
-  //     data: {
-  //       URL,
-  //     },
-  //   }).then((response) => {
-  //     const name = response
-  //       .headers['content-disposition']
-  //       .slice(
-  //         response.headers['content-disposition'].indexOf('=') + 2,
-  //         -1,
-  //       );
-
-  //     saveAs(response.data, name);
-  //   });
-  // };
 
 
   downloadTrack = (meta) => {
