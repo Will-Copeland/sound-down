@@ -10,12 +10,9 @@ const scdl = require("./scdl").init(process.env.CLIENT_ID);
 const PORT = process.env.PORT ||8080;
 
 const bodyParser = require("body-parser");
+app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-app.get("/", (req, res, next) => {
-  res.send("GOT")
-});
 
 app.get("/test/?", (req, res, next) => {
   res.send('Test')
