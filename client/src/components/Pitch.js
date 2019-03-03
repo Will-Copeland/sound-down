@@ -5,7 +5,8 @@ import {
 
 const styles = {
   root: {
-    margin: '1rem',
+    margin: 'auto',
+    textAlign: 'center'
   },
 };
 
@@ -17,6 +18,9 @@ const Pitch = ({ classes }) => (
         <br/> <br/>
         On mobile devices you will need to unzip
         the file when downloading playlists
+    </Typography>
+    <Typography variant="subtitle1">
+      v0.1.2: now sets track names properly!
     </Typography>
   </div>
 );

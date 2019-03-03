@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
 // import './App.css';
-
+import axios from 'axios';
 import Form from './containers/Form';
 import Layout from './containers/Layout';
 import Error from './components/Error';
@@ -25,22 +25,69 @@ class App extends React.Component {
     };
   }
 
+  downloadPlaylist = (meta) => {
+    const { src } = this.state;
+    console.log(src);
+    
+    axios({
+      method: 'get',
+      url: `get-playlist/?url=${src}`,
+      responseType: 'blob', // important
+
+    }).then((res) => {
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      const name = meta.title;
+      a.style = 'display: none';
+      a.download = name;
+      a.rel = 'noopener';
+      a.href = window.URL.createObjectURL(res.data);
+      a.click();
+    });
+  };
+
+
+  downloadTrack = (meta) => {
+    axios({
+      method: 'get',
+      url: `get-track/?url=${meta.stream_url}`,
+      responseType: 'blob', // important
+
+    }).then((res) => {
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      const name = meta.title;
+      a.style = 'display: none';
+      a.download = `${name}.mp3`;
+      a.rel = 'noopener';
+      a.href = window.URL.createObjectURL(res.data);
+      a.click();
+    });
+  }
+
+
   submitForm = (URL) => {
-    const { downloads } = this.state;
-    console.log(URL);
+    this.setState({ loading: true, src: URL });
+
 
     if (URL.includes('https://soundcloud.com/')) {
-      this.setState({
-        downloading: true,
-        downloads: [
-          ...downloads,
-          `/sound?url=${URL}`,
-        ],
+      axios({
+        method: 'get',
+        url: `/item-meta/?url=${URL}`,
+      }).then((response) => {
+        const meta = response.data;
+
+        if (meta.kind === 'track') {
+          this.downloadTrack(meta);
+        } else if (meta.kind === 'playlist') {
+          this.downloadPlaylist(meta);
+        }
+        console.log(meta);
+
       });
-    } else {
-      this.setState({ error: 'Invalid URL!', errOpen: true });
     }
   };
+
 
   renderIframes = () => {
     const { downloads } = this.state;

@@ -51,7 +51,7 @@ class Scdl {
           .then(res => {
             archive.append(
               res.body, 
-              { name: `${track.permalink}.mp3` }
+              { name: `${track.title}.mp3` }
             );
         })        
       )
