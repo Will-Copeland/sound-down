@@ -28,7 +28,7 @@ class App extends React.Component {
   downloadPlaylist = (meta) => {
     const { src } = this.state;
     console.log(src);
-    
+
     axios({
       method: 'get',
       url: `get-playlist/?url=${src}`,
@@ -71,19 +71,25 @@ class App extends React.Component {
 
 
     if (URL.includes('https://soundcloud.com/')) {
+      const index = URL.indexOf('https://soundcloud.com/');
+      const newURL = URL.slice(index, URL.length);
+      console.log('newURL: ', newURL);
+
       axios({
         method: 'get',
-        url: `/item-meta/?url=${URL}`,
+        url: `/item-meta/?url=${newURL}`,
       }).then((response) => {
         const meta = response.data;
 
         if (meta.kind === 'track') {
-          this.downloadTrack(meta);
+          try {
+            this.downloadTrack(meta);
+          } catch (e) {
+            console.log('Error Caught: ', e);
+          }
         } else if (meta.kind === 'playlist') {
           this.downloadPlaylist(meta);
         }
-        console.log(meta);
-
       });
     }
   };
