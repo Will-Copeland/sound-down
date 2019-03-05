@@ -28,12 +28,11 @@ class App extends React.Component {
   downloadPlaylist = (meta) => {
     const { src } = this.state;
     console.log(src);
-    
+
     axios({
       method: 'get',
       url: `get-playlist/?url=${src}`,
       responseType: 'blob', // important
-
     }).then((res) => {
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -43,16 +42,15 @@ class App extends React.Component {
       a.rel = 'noopener';
       a.href = window.URL.createObjectURL(res.data);
       a.click();
+      this.setState({ downloading: false });
     });
   };
-
 
   downloadTrack = (meta) => {
     axios({
       method: 'get',
       url: `get-track/?url=${meta.stream_url}`,
       responseType: 'blob', // important
-
     }).then((res) => {
       const a = document.createElement('a');
       document.body.appendChild(a);
@@ -62,50 +60,53 @@ class App extends React.Component {
       a.rel = 'noopener';
       a.href = window.URL.createObjectURL(res.data);
       a.click();
+      this.setState({ downloading: false });
     });
-  }
-
+  };
 
   submitForm = (URL) => {
-    this.setState({ loading: true, src: URL });
-
+    this.setState({ downloading: true, src: URL });
 
     if (URL.includes('https://soundcloud.com/')) {
+      const index = URL.indexOf('https://soundcloud.com/');
+      const newURL = URL.slice(index, URL.length);
+      console.log('newURL: ', newURL);
+
       axios({
         method: 'get',
-        url: `/item-meta/?url=${URL}`,
+        url: `/item-meta/?url=${newURL}`,
       }).then((response) => {
         const meta = response.data;
 
         if (meta.kind === 'track') {
-          this.downloadTrack(meta);
+          try {
+            this.downloadTrack(meta);
+          } catch (e) {
+            console.log('Error Caught: ', e);
+          }
         } else if (meta.kind === 'playlist') {
           this.downloadPlaylist(meta);
         }
-        console.log(meta);
-
       });
     }
   };
 
-
   renderIframes = () => {
     const { downloads } = this.state;
     if (!downloads.length) return null;
-    return downloads
-      .map((src, i) => {
-        const key = `dl-${i}`;
-        return (
-          <iframe
-            key={key}
-            id={key}
-            style={{ display: 'none' }}
-            title={key}
-            src={src}
-          />
-        );
-      });
-  }
+    return downloads.map((src, i) => {
+      const key = `dl-${i}`;
+      return (
+        <iframe
+          key={key}
+          id={key}
+          style={{ display: 'none' }}
+          title={key}
+          src={src}
+        />
+      );
+    });
+  };
 
   handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -121,16 +122,22 @@ class App extends React.Component {
     return (
       <div className="App">
         <Layout>
-          {error.length > 0 ? <Error handleClose={this.handleClose} open={errOpen} error={error} /> : <div /> }
+          {error.length > 0 ? (
+            <Error
+              handleClose={this.handleClose}
+              open={errOpen}
+              error={error}
+            />
+          ) : (
+            <div />
+          )}
 
           <Form downloading={downloading} sendForm={this.submitForm} />
         </Layout>
-        { this.renderIframes() }
+        {this.renderIframes()}
       </div>
-
     );
   }
 }
-
 
 export default withStyles(styles)(App);

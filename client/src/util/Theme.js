@@ -4,6 +4,9 @@ const Theme = createMuiTheme({
   typography: {
     color: '#FFF',
     fontFamily: "'Play', sans-serif",
+    h6: {
+      fontSize: '2rem'
+    },
     h5: {
       color: '#FFF',
     },
