@@ -6,21 +6,20 @@ import {
 const styles = {
   root: {
     margin: 'auto',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 };
 
 const Pitch = ({ classes }) => (
   <div className={classes.root}>
     <Typography>
-        The better Sound Cloud downloader.
         Download whole playlists with one button.
-        <br/> <br/>
+      <br />
+      {' '}
+      <br />
         On mobile devices you will need to unzip
-        the file when downloading playlists
-    </Typography>
-    <Typography variant="subtitle1">
-      v0.1.2: now sets track names properly!
+        the file when downloading playlists with an
+        app like ZArchiver
     </Typography>
   </div>
 );

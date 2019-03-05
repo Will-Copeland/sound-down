@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  withStyles, Typography,
+  withStyles, Typography, CircularProgress,
 } from '@material-ui/core';
 
 const styles = {
@@ -15,8 +15,8 @@ const Loading = ({ classes }) => (
   <div className={classes.root}>
     <Typography variant="subtitle1">
         Depending on length, your download may take a few minutes.
-        Feel free to start another!
     </Typography>
+    <CircularProgress />
   </div>
 );
 

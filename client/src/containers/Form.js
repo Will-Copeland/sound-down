@@ -78,7 +78,7 @@ class Form extends Component {
           value={link}
         />
         <Button className={classes.button} onClick={this.handleSubmit}>
-          <Typography variant="body1">Submit</Typography>
+          <Typography variant="body1">Download</Typography>
         </Button>
       </div>
     );
