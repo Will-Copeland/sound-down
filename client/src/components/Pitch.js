@@ -6,6 +6,7 @@ import {
 const styles = {
   root: {
     margin: 'auto',
+    marginTop: '1rem',
     textAlign: 'center',
   },
 };
