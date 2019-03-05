@@ -67,7 +67,7 @@ class App extends React.Component {
 
 
   submitForm = (URL) => {
-    this.setState({ loading: true, src: URL });
+    this.setState({ downloading: true, src: URL });
 
 
     if (URL.includes('https://soundcloud.com/')) {
