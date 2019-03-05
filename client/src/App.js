@@ -65,12 +65,12 @@ class App extends React.Component {
   };
 
   submitForm = (URL) => {
-    this.setState({ downloading: true, src: URL });
 
     if (URL.includes('https://soundcloud.com/')) {
       const index = URL.indexOf('https://soundcloud.com/');
       const newURL = URL.slice(index, URL.length);
       console.log('newURL: ', newURL);
+      this.setState({ downloading: true, src: newURL });
 
       axios({
         method: 'get',
