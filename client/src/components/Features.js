@@ -5,7 +5,9 @@ const styles = {
   root: {
     bottom: 0,
     position: 'absolute',
-    margin: '1rem'
+    margin: '1rem',
+    maxHeight: '20%',
+    overflow: 'auto',
   },
 };
 
