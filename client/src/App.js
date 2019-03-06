@@ -65,7 +65,7 @@ class App extends React.Component {
   };
 
   submitForm = (URL) => {
-
+    const { downloads } = this.state;
     if (URL.includes('https://soundcloud.com/')) {
       const index = URL.indexOf('https://soundcloud.com/');
       const newURL = URL.slice(index, URL.length);
@@ -85,7 +85,13 @@ class App extends React.Component {
             console.log('Error Caught: ', e);
           }
         } else if (meta.kind === 'playlist') {
-          this.downloadPlaylist(meta);
+          this.setState({
+            downloads: [
+              ...downloads,
+              `http://localhost:8080/get-playlist?url=${newURL}`,
+            ],
+          });
+          this.setState({ downloading: false });
         }
       });
     }
