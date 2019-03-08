@@ -88,7 +88,7 @@ class App extends React.Component {
           this.setState({
             downloads: [
               ...downloads,
-              `http://localhost:8080/get-playlist?url=${newURL}`,
+              `/get-playlist?url=${newURL}`,
             ],
           });
           this.setState({ downloading: false });
